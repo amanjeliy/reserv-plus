@@ -848,6 +848,10 @@ span.ver {
 	background: #fff;
 }
 
+#pdf-canvas {
+	display: block;
+}
+
 #pdfViewer canvas {
 	width: 100% !important;
 	height: auto !important;
