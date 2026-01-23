@@ -417,12 +417,7 @@
 		    });
 		});
 	</script>
- 
-<script type="text/javascript">
-  document.getElementById('menu-2-1').addEventListener('click', () => {
-    window.location.href = 'pdf.html';
-  });
-</script>
+
     <div class="popup-fullscreen-menu notmenu">
     	<div class="popup-fullscreen-wrap">
     		<div class="popup-fullscreen-content">
@@ -664,12 +659,61 @@
     		</div>
     	</div>
     </div>
-
-	
-
+	<div id="pdfOverlay">
+		<div class="pdf-header">
+			<div class="pdf-title">Військово-обліковий документ</div>
+<!--			<div style="width:48px"></div>-->
+			<div class="container-text-align">
+				<button id="pdfDone" style="text-align: right">Done</button>
+			</div>
+		</div>
+		<div id="pdfViewer"></div>
+	</div>
 <script src="../js/scripts.js"></script>
+	<!-- pdf.js -->
+	<script src="../js/pdf.min.js"></script>
+	<script>
+		pdfjsLib.GlobalWorkerOptions.workerSrc =
+				'../js/pdf.worker.min.js';
 
+		const overlay = document.getElementById('pdfOverlay');
+		const viewer = document.getElementById('pdfViewer');
 
+		document.getElementById('menu-2-1').addEventListener('click', () => {
+			openPdf('vod.pdf'); // твій PDF
+		});
 
+		document.getElementById('pdfDone').addEventListener('click', closePdf);
 
+		function openPdf(url) {
+			overlay.style.display = 'block';
+			viewer.innerHTML = '';
+
+			const dpr = window.devicePixelRatio || 2;
+
+			pdfjsLib.getDocument(url).promise.then(pdf => {
+				for (let i = 1; i <= pdf.numPages; i++) {
+					pdf.getPage(i).then(page => {
+						const viewport = page.getViewport({ scale: 1 });
+						const scale = (viewer.clientWidth / viewport.width) * dpr;
+						const scaled = page.getViewport({ scale });
+
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+
+						canvas.width = scaled.width;
+						canvas.height = scaled.height;
+
+						page.render({ canvasContext: ctx, viewport: scaled });
+						viewer.appendChild(canvas);
+					});
+				}
+			});
+		}
+
+		function closePdf() {
+			overlay.style.display = 'none';
+			viewer.innerHTML = '';
+		}
+	</script>
 </body></html>

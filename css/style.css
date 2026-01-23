@@ -801,4 +801,58 @@ span.ver {
 	height: 85%;
 	padding-bottom: 330px !important;
   }
-} 
+}
+#pdfOverlay {
+	position: fixed;
+	inset: 0;
+	background: #fff;
+	z-index: 999999;
+	display: none;
+	padding-top: env(safe-area-inset-top);
+	padding-bottom: env(safe-area-inset-bottom);
+}
+
+.pdf-header {
+	position: sticky;
+	top: 0;
+	height: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #fff;
+	z-index: 10;
+}
+
+.pdf-header button {
+	background: none;
+	border: none;
+	color: #4da3ff;
+	font-size: 17px;
+}
+
+.pdf-title {
+	color: #000;
+	font-size: 16px;
+	background: #fff;
+	font-weight: 500;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 70%;
+}
+
+#pdfViewer {
+	position: absolute;
+	top: calc(56px + env(safe-area-inset-top));
+	bottom: env(safe-area-inset-bottom);
+	left: 0;
+	right: 0;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#pdfViewer canvas {
+	width: 100% !important;
+	height: auto !important;
+	display: block;
+}
