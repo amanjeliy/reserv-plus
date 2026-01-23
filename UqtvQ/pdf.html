@@ -3,104 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
   />
+
   <title>Військово-обліковий документ</title>
 
   <style>
-    :root {
-      --bg: #f2f2f7;
-      --card-bg: #ffffff;
-      --text: #000;
-      --muted: #6e6e73;
-      --shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
     body {
       margin: 0;
-      background: var(--bg);
+      background: #f2f2f7;
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Helvetica Neue", Arial, sans-serif;
-      color: var(--text);
+      "Helvetica Neue", Arial, sans-serif;
     }
 
-    /* ===== Header (як iOS preview) ===== */
+    /* iOS-like header */
     .header {
       height: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 16px;
-      background: var(--bg);
-      position: sticky;
-      top: 0;
-      z-index: 10;
     }
 
-    .header-title {
+    .title {
       font-size: 17px;
       font-weight: 600;
     }
 
-    .header-action {
-      font-size: 17px;
+    .done {
       color: #007aff;
-      font-weight: 500;
+      font-size: 17px;
     }
 
-    /* ===== Container ===== */
-    .container {
+    /* PDF container */
+    .wrapper {
       display: flex;
       justify-content: center;
-      padding: 16px 12px 40px;
+      padding: 12px;
     }
 
-    /* ===== PDF card ===== */
-    .pdf-wrapper {
-      width: 100%;
-      max-width: 390px; /* iPhone 14 Pro width */
-      background: var(--card-bg);
+    .page {
+      background: #fff;
       border-radius: 12px;
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
       overflow: hidden;
     }
 
-    .pdf-frame {
+    canvas {
       width: 100%;
-      height: calc(100vh - 120px);
-      border: none;
-    }
-
-    /* ===== Bottom safe area ===== */
-    .safe-area {
-      height: env(safe-area-inset-bottom);
+      height: auto;
+      display: block;
     }
   </style>
 </head>
 
 <body>
-  <!-- Header -->
-  <div class="header">
-    <div class="header-title">Військово-обліковий документ</div>
-    <div class="header-action">Done</div>
-  </div>
+<div class="header">
+  <div class="title">Військово-обліковий документ</div>
+  <div class="done">Done</div>
+</div>
 
-  <!-- Content -->
-  <div class="container">
-    <div class="pdf-wrapper">
-      <iframe
-        class="pdf-frame"
-        src="documents/Військово-обліковий документ.pdf"
-      ></iframe>
-    </div>
+<div class="wrapper">
+  <div class="page">
+    <canvas id="pdf"></canvas>
   </div>
+</div>
 
-  <div class="safe-area"></div>
+<!-- PDF.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script>
+  const url = "vod.pdf";
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+  const canvas = document.getElementById("pdf");
+  const ctx = canvas.getContext("2d");
+
+  async function render() {
+    const pdf = await pdfjsLib.getDocument(url).promise;
+    const page = await pdf.getPage(1);
+
+    const viewport = page.getViewport({ scale: 1 });
+    const screenWidth = Math.min(window.innerWidth - 24, 390);
+    const scale = screenWidth / viewport.width;
+
+    const scaledViewport = page.getViewport({ scale });
+
+    canvas.width = scaledViewport.width;
+    canvas.height = scaledViewport.height;
+
+    await page.render({
+      canvasContext: ctx,
+      viewport: scaledViewport
+    }).promise;
+  }
+
+  render();
+  window.addEventListener("resize", render);
+</script>
 </body>
 </html>
