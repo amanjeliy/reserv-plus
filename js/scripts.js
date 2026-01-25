@@ -1,7 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         document.body.style.backgroundColor = '#dfdeca';
+
     }, 3000);
+
+    setTimeout(() => {
+        const scan = document.getElementById('scan');
+        scan.className = 'badge success';
+        scan.innerHTML = `
+    <div class="ring">
+      <div class="check">✓</div>
+    </div>
+  `;
+    }, 1200);
+
+    setTimeout(() => {
+        document.getElementById('scan')?.remove();
+    }, 2700);
 
     setTimeout(function() {
         var loader = document.querySelector('.loader');

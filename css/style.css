@@ -887,3 +887,98 @@ span.ver {
 	width: 26px;
 	height: 26px;
 }
+
+/* ===== BADGE BASE ===== */
+.badge {
+	position:fixed;
+	top:calc(env(safe-area-inset-top) + 18px);
+	left:50%;
+	transform:translateX(-50%);
+	width:86px;
+	height:86px;
+	background:#000;
+	border-radius:22px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:9999;
+}
+
+/* ===== BASE BADGE ===== */
+.badge {
+	position:fixed;
+	top:calc(env(safe-area-inset-top) + 18px);
+	left:50%;
+	transform:translateX(-50%);
+	width:86px;
+	height:86px;
+	background:#000;
+	border-radius:22px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	z-index:9999;
+}
+
+/* ===== SCAN STATE ===== */
+.scan {
+	animation:pulse 1.15s ease-in-out infinite;
+}
+
+@keyframes pulse {
+	0% { opacity:.45 }
+	50% { opacity:1 }
+	100% { opacity:.45 }
+}
+
+/* Face ID glyph — bright green */
+.faceid svg {
+	width:42px;
+	height:42px;
+	stroke:#6CFF77;   /* bright green */
+	stroke-width:1.7;
+	fill:none;
+}
+
+/* ===== SUCCESS STATE ===== */
+.success {
+	animation:
+			popIn .25s ease-out forwards,
+			hold 1s linear .25s forwards,
+			popOut .3s ease-in 1.25s forwards;
+}
+
+@keyframes popIn {
+	from {
+		opacity:0;
+		transform:translateX(-50%) scale(.82);
+	}
+	to {
+		opacity:1;
+		transform:translateX(-50%) scale(1);
+	}
+}
+@keyframes hold { to { opacity:1 } }
+@keyframes popOut {
+	to {
+		opacity:0;
+		transform:translateX(-50%) scale(.92);
+	}
+}
+
+.ring {
+	width:54px;
+	height:54px;
+	border-radius:50%;
+	border:4px solid #6CFF77;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+.check {
+	color:#6CFF77;
+	font-size:32px;
+	font-weight:700;
+	margin-top:-2px;
+}
