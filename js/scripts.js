@@ -45,12 +45,11 @@ $('.m_Copydevice').on('click', function() {
   $(window).on('resize', setWrapWidth);
 })(jQuery);
 
- 
+function flipCard() {
+    $('.wrap-flipcard').toggleClass('flipped');
+}
 
 $(document).ready(function () {
-  function flipCard() {
-    $('.wrap-flipcard').toggleClass('flipped');
-  }
   const wrapFlipcard = $('.wrap-flipcard')[0];
   const hammer = new Hammer(wrapFlipcard);
   hammer.on('swipeleft swiperight', function (event) {
@@ -176,10 +175,6 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    function flipCard() {
-        console.log('Flip card triggered');
-    }
-
     $('.flip-card').click(function() {
         flipCard();
     });
