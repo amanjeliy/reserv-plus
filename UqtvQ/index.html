@@ -765,58 +765,6 @@
 			currentPage.render({ canvasContext: ctx, viewport });
 		}
 
-		(() => {
-			const viewer = document.getElementById('pdfViewer');
-			const canvas = document.getElementById('pdf-canvas');
-
-			let startDistance = 0;
-			let startScale = 1;
-			let tempScale = 1;
-			let pinching = false;
-
-			function distance(touches) {
-				const dx = touches[0].clientX - touches[1].clientX;
-				const dy = touches[0].clientY - touches[1].clientY;
-				return Math.hypot(dx, dy);
-			}
-
-			viewer.addEventListener('touchstart', e => {
-				if (e.touches.length !== 2) return;
-
-				e.preventDefault();
-				pinching = true;
-
-				startDistance = distance(e.touches);
-				startScale = currentScale; // ← ВЖЕ ІСНУЮЧА змінна
-				tempScale = 1;
-
-				canvas.style.transformOrigin = 'center center';
-				canvas.style.willChange = 'transform';
-			}, { passive: false });
-
-			viewer.addEventListener('touchmove', e => {
-				if (!pinching || e.touches.length !== 2) return;
-
-				e.preventDefault();
-
-				const d = distance(e.touches);
-				tempScale = Math.min(3, Math.max(0.8, d / startDistance));
-
-				canvas.style.transform = `scale(${tempScale})`;
-			}, { passive: false });
-
-			viewer.addEventListener('touchend', () => {
-				if (!pinching) return;
-				pinching = false;
-
-				canvas.style.transform = 'none';
-				canvas.style.willChange = 'auto';
-
-				currentScale = Math.min(3, Math.max(0.8, startScale * tempScale));
-				renderPdf(); // 🔥 ОДИН render ПІСЛЯ жесту
-			});
-		})();
-
 		function closePdf() {
 			overlay.style.display = 'none';
 			viewer.innerHTML = '';
@@ -854,5 +802,15 @@
 				blur.classList.remove('active');
 			}
 		});
+
+		document.addEventListener('touchstart', e => {
+			const y = e.touches[0].clientY;
+			const h = window.innerHeight;
+
+			// Bottom swipe zone (home indicator area)
+			if (y > h - 80) {
+				blur.classList.add('active');
+			}
+		}, { passive: true });
 	</script>
 </body></html>
