@@ -996,7 +996,6 @@ span.ver {
 	position: fixed;
 	/* Move higher: Use safe-area directly without extra spacing */
 	top: 0;
-	padding-top: 11px;
 	left: 50%;
 
 	width: 144px;
