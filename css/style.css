@@ -24,6 +24,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+	height: 100vh;
+	-webkit-tap-highlight-color: transparent;
 }
 a {
 	text-decoration: none;
@@ -985,13 +987,14 @@ span.ver {
 	opacity:1;
 }
 
-/* --- NATIVE FACE ID STYLES --- */
+/* --- REPLACE THE BOTTOM CSS BLOCK WITH THIS --- */
 
-/* 1. The Black Box (Top Middle) */
+/* 1. The Black Box (Moved Higher) */
 .faceid-box {
 	position: fixed;
-	top: 10px; /* Original Position */
-	top: calc(10px + env(safe-area-inset-top));
+	/* Move higher: Use safe-area directly without extra spacing */
+	top: 0;
+	top: env(safe-area-inset-top);
 	left: 50%;
 
 	width: 144px;
@@ -1007,14 +1010,14 @@ span.ver {
 	box-shadow: 0 10px 40px rgba(0,0,0,0.4);
 	z-index: 10000;
 
-	/* Animation: Transform AND Opacity */
+	/* Animation: Transform + Opacity */
 	transform: translateX(-50%) scale(0.9);
 	opacity: 1;
 	transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
 	opacity 0.4s ease;
 }
 
-/* Class to hide the box smoothly */
+/* Force Hide (Fixed Priority) */
 .faceid-box.fade-out {
 	opacity: 0 !important;
 	transform: translateX(-50%) scale(0.95) !important;
