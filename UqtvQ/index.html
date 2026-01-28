@@ -17,14 +17,22 @@
 	</div>
 
 	<div class="loader">
-		<!-- FACE ID SCAN -->
-		<div class="badge scan faceid" id="scan">
-			<svg viewBox="0 0 24 24">
-				<path d="M4 8V6a2 2 0 0 1 2-2h2M20 8V6a2 2 0 0 0-2-2h-2M4 16v2a2 2 0 0 0 2 2h2M20 16v2a2 2 0 0 1-2 2h-2"/>
-				<circle cx="9" cy="11" r="1"/>
-				<circle cx="15" cy="11" r="1"/>
-				<path d="M9 15c1.5 1 4.5 1 6 0"/>
-			</svg>
+		<div class="faceid-box">
+			<div class="icon-container">
+				<svg id="face-id-svg" class="scanning" viewBox="0 0 50 50">
+					<path d="M14,4 A14,14 0 0,0 4,14" />
+					<path d="M36,4 A14,14 0 0,1 46,14" />
+					<path d="M46,36 A14,14 0 0,1 36,46" />
+					<path d="M4,36 A14,14 0 0,0 14,46" />
+					<path d="M17,20 L17,20" stroke-width="4" />
+					<path d="M33,20 L33,20" stroke-width="4" />
+					<path d="M17,30 Q25,38 33,30" />
+				</svg>
+				<svg id="success-svg" viewBox="0 0 50 50">
+					<circle cx="25" cy="25" r="23" stroke-width="2.5" />
+					<path d="M14 26 L22 34 L36 16" stroke-width="3" />
+				</svg>
+			</div>
 		</div>
 	</div>
 	<div class="container">
@@ -843,15 +851,16 @@
 			lastDistance = null;
 		});
 
-		const blur = document.getElementById('privacy-blur');
+		window.addEventListener("blur", lockAppForSwitcher);
+		window.addEventListener("pagehide", lockAppForSwitcher);
 
-		document.addEventListener('visibilitychange', () => {
+		document.addEventListener("visibilitychange", () => {
 			if (document.hidden) {
-				// App switch / background
-				blur.classList.add('active');
+				lockAppForSwitcher();
 			} else {
-				// Returned to app
-				blur.classList.remove('active');
+				if (loader && loader.style.display !== 'none') {
+					unlockAppFromSwitcher();
+				}
 			}
 		});
 	</script>

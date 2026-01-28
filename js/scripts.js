@@ -1,30 +1,88 @@
+/* REPLACE LINES 1-28 WITH THIS BLOCK */
+
+let faceSvg, successSvg, faceIdBox, loader;
+
+function initElements() {
+    faceSvg = document.getElementById('face-id-svg');
+    successSvg = document.getElementById('success-svg');
+    faceIdBox = document.querySelector('.faceid-box');
+    loader = document.querySelector('.loader');
+}
+
+// 1. Initial Load Animation
 document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        document.body.style.backgroundColor = '#dfdeca';
+    initElements();
 
-    }, 3000);
+    // Start locked
+    if(loader) loader.classList.add('locked');
+    document.body.classList.add('app-locked');
 
+    // Sequence
     setTimeout(() => {
-        const scan = document.getElementById('scan');
-        scan.className = 'badge success';
-        scan.innerHTML = `
-    <div class="ring">
-      <div class="check">✓</div>
-    </div>
-  `;
+        // Step 1: Show Success Checkmark (1.2s)
+        if(faceSvg) faceSvg.style.display = 'none';
+        if(successSvg) successSvg.classList.add('visible');
     }, 1200);
 
     setTimeout(() => {
-        document.getElementById('scan')?.remove();
-    }, 2700);
+        // Step 2: Fade out the BLACK BOX (2.2s)
+        if(faceIdBox) faceIdBox.classList.add('fade-out');
+    }, 2200);
 
-    setTimeout(function() {
-        var loader = document.querySelector('.loader');
+    setTimeout(() => {
+        // Step 3: Remove Loader & Change Background (3.0s)
+        document.body.style.backgroundColor = '#dfdeca';
+
         if (loader) {
             loader.style.display = 'none';
+            document.body.classList.remove('app-locked');
         }
     }, 3000);
 });
+
+// 2. App Switcher Logic
+function lockAppForSwitcher() {
+    if(!loader) initElements();
+
+    if(loader) {
+        loader.style.display = 'block';
+        loader.classList.add('locked');
+
+        // Reset Box Visibility
+        if(faceIdBox) faceIdBox.classList.remove('fade-out');
+
+        // Reset Icons
+        if(faceSvg) { faceSvg.style.display = 'block'; }
+        if(successSvg) { successSvg.classList.remove('visible'); }
+    }
+    document.body.classList.add('app-locked');
+    void document.body.offsetWidth; // Force Repaint
+}
+
+// 3. Re-Unlock Logic
+function unlockAppFromSwitcher() {
+    if(!loader) initElements();
+
+    setTimeout(() => {
+        // Show Success
+        if(faceSvg) faceSvg.style.display = 'none';
+        if(successSvg) successSvg.classList.add('visible');
+
+        // Hide Box First
+        setTimeout(() => {
+            if(faceIdBox) faceIdBox.classList.add('fade-out');
+
+            // Then Hide Loader
+            setTimeout(() => {
+                if(loader) loader.style.display = 'none';
+                document.body.classList.remove('app-locked');
+            }, 400);
+
+        }, 800);
+    }, 500);
+}
+
+/* END OF REPLACEMENT BLOCK */
 
 $('.m_Copydevice').on('click', function() {
     const el = $(this);
